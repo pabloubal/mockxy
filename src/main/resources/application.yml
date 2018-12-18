@@ -1,0 +1,30 @@
+mappings:
+  activity-api:
+    host: https://activity-api.stage.hotelbeds.com
+    dir: activity-api
+  activity-content-distribution:
+    host: https://activity-content-distribution-service.stage.service
+    dir: activity-content-distribution
+  ACE:
+    host: 192.168.1.1:3001
+    dir: ace
+  tab-auth-api:
+    host: http://tab-auth-api.int.hotelbeds.com
+    dir: tab-auth-api
+
+cache:
+  strategy: FileCache
+  baseDir: /home/pablo/tmp
+
+test: true
+
+tcp_separator: "-"
+
+server:
+  http:
+    host: localhost
+    port: 8088
+
+  tcp:
+    host: localhost
+    port: 3001
