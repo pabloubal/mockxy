@@ -27,9 +27,15 @@ public class GetCache extends BaseHandler {
         if(!Objects.isNull(cachedResp)){
             cachedResp.getHeader().put(Constants.CACHED_RESPONSE_HEADER_KEY, Constants.CACHED_RESPONSE_HEADER_VALUE);
 
-            response.setBody(cachedResp.getBody());
-            response.setHeader(cachedResp.getHeader());
-            response.setStatusCode(cachedResp.getStatusCode());
+            if(request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_TCP)){
+                response.setBody(cachedResp.getStatusCode());
+            }
+            else {
+
+                response.setBody(cachedResp.getBody());
+                response.setHeader(cachedResp.getHeader());
+                response.setStatusCode(cachedResp.getStatusCode());
+            }
 
             return 0;
         }

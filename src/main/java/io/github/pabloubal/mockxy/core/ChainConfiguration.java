@@ -5,6 +5,7 @@ import io.github.pabloubal.mockxy.core.handlers.generic.GetCache;
 import io.github.pabloubal.mockxy.core.handlers.generic.Mappings;
 import io.github.pabloubal.mockxy.core.handlers.generic.SetCache;
 import io.github.pabloubal.mockxy.core.handlers.http.RemoteHTTPCall;
+import io.github.pabloubal.mockxy.core.handlers.socket.RemoteTCPCall;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,9 @@ public class ChainConfiguration {
     @Autowired
     RemoteHTTPCall remoteHTTPCall;
 
+    @Autowired
+    RemoteTCPCall remoteTCPCall;
+
     @Bean
     ChainHandler chainHandler(){
 
@@ -34,7 +38,7 @@ public class ChainConfiguration {
 
         chainHandler.use(HandlerType.SOCKET, mappings);
         chainHandler.use(HandlerType.SOCKET, getCache);
-        //chainHandler.use(HandlerType.SOCKET, remoteTCPCall);
+        chainHandler.use(HandlerType.SOCKET, remoteTCPCall);
         chainHandler.use(HandlerType.SOCKET, setCache);
 
         return chainHandler;

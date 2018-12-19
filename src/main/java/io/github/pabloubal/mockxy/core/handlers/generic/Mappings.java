@@ -8,6 +8,7 @@ import io.github.pabloubal.mockxy.utils.Mapping;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 @ConfigurationProperties
 public class Mappings extends BaseHandler {
     private Map<String, Mapping> mappings = new HashMap<>();
-    private String tcp_separator;
+    private String tcpSeparator;
 
 
     @Override
@@ -28,7 +29,7 @@ public class Mappings extends BaseHandler {
             key = request.getHeader().get(Constants.HTTP_HEADER_HOST).split("\\.")[0];
         }
         else{
-            key = request.getBody().split(tcp_separator)[0];
+            key = request.getBody().split(tcpSeparator)[0];
         }
 
         if(!mappings.containsKey(key)){
@@ -56,6 +57,9 @@ public class Mappings extends BaseHandler {
         this.mappings = mappings;
     }
 
+    public void setTcpSeparator(String tcpSeparator) {
+        this.tcpSeparator = tcpSeparator;
+    }
 }
 
 

@@ -101,7 +101,7 @@ public class FileCache implements CacheStrategy {
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
-            if(request.getHeader().containsKey(Constants.MAPPINGS_PROTO_TCP)){
+            if(request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_TCP)){
                 this.writeTCP(request, response, bw);
             }
             else{
@@ -154,7 +154,7 @@ public class FileCache implements CacheStrategy {
         String contentToHash = "";
         String method;
 
-        if(request.getHeader().containsKey(Constants.MAPPINGS_PROTO_TCP)){
+        if(request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_TCP)){
             contentToHash = request.getBody();
             method = Constants.MAPPINGS_PROTO_TCP;
         }

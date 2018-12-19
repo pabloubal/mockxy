@@ -19,23 +19,10 @@ import java.util.Map;
 
 public class RequestHandler implements Runnable {
 
-    /**
-     * Socket connected to client passed by Proxy server
-     */
     Socket clientSocket;
-
-    /**
-     * Read data client sends to proxy
-     */
     BufferedReader proxyToClientBr;
-
-    /**
-     * Send data from proxy to client
-     */
     BufferedWriter proxyToClientBw;
-
     ChainHandler chainHandler;
-
 
     /**
      * Thread that is used to transmit data read from client to server when using HTTPS
@@ -44,10 +31,6 @@ public class RequestHandler implements Runnable {
     private Thread httpsClientToServer;
 
 
-    /**
-     * Creates a ReuqestHandler object capable of servicing HTTP(S) GET requests
-     * @param clientSocket socket connected to the client
-     */
     public RequestHandler(Socket clientSocket, ChainHandler chainHandler){
         this.chainHandler = chainHandler;
         this.clientSocket = clientSocket;
@@ -61,12 +44,6 @@ public class RequestHandler implements Runnable {
         }
     }
 
-
-
-    /**
-     * Reads and examines the requestString and calls the appropriate method based
-     * on the request type.
-     */
     @Override
     public void run() {
         try {
@@ -136,8 +113,8 @@ public class RequestHandler implements Runnable {
             }
 
             Request req = new Request();
-            req.getHeader().put(Constants.MAPPINGS_PROTO_TCP.split(":")[0],
-                    Constants.MAPPINGS_PROTO_TCP.split(":")[1]);
+            req.getHeader().put(Constants.MAPPINGS_PROTOCOL, Constants.MAPPINGS_PROTO_TCP);
+
             req.setBody(message);
 
             Response resp = this.chainHandler.run(HandlerType.SOCKET, req);
