@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    consul:
+      host: consul.testaws.service
+      port: 8500
+      discovery:
+        enabled: true

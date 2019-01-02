@@ -3,26 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.18.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>io.github.pabloubal</groupId>
+		<artifactId>mockxy</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>io.github.pabloubal</groupId>
-	<artifactId>mockxy</artifactId>
+	<artifactId>mockxy-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mockxy</name>
-	<packaging>pom</packaging>
-	<description>Spring-Boot-based proxy for http and tcp requests that caches responses and can be used to serve mocked results for testing purposes</description>
-
-	<properties>
-		<java.version>1.8</java.version>
-	</properties>
-
-	<modules>
-		<module>mockxy-core</module>
-        <module>mockxy-starter</module>
-	</modules>
+	<packaging>jar</packaging>
+	<name>mockxy-core</name>
 
 	<dependencies>
 		<dependency>
@@ -41,5 +30,34 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+			<version>1.3.0.RELEASE</version>
+		</dependency>
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
