@@ -134,9 +134,9 @@ public class FileCache implements CacheStrategy {
 
     private void writeHTTP(Request request, Response response, BufferedWriter bw) throws IOException {
         String[] method = request.getHeader().get(Constants.HTTP_HEADER_METHOD).split(" ");
-        String proto = method[method.length - 1];
+        //String proto = method[method.length - 1];
 
-        bw.write(String.join(" ", proto, response.getStatusCode()));
+        bw.write(response.getStatusCode());
         bw.newLine();
 
         response.getHeader().entrySet().stream()

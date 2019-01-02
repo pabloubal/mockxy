@@ -1,5 +1,6 @@
 package io.github.pabloubal.mockxy.core.handlers.generic;
 
+import io.github.pabloubal.mockxy.core.ChainLink;
 import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
 import io.github.pabloubal.mockxy.core.requests.Request;
@@ -11,10 +12,10 @@ public class SetCache extends BaseHandler {
     private CacheManager cacheManager;
 
     @Override
-    public int run(Request request, Response response) {
+    public int run(Request request, Response response, ChainLink nextLink) {
         this.cacheManager.set(request, response);
 
-        return super.run(request, response);
+        return super.run(request, response, nextLink);
     }
 }
 

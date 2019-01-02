@@ -1,5 +1,6 @@
 package io.github.pabloubal.mockxy.core.handlers.socket;
 
+import io.github.pabloubal.mockxy.core.ChainLink;
 import io.github.pabloubal.mockxy.core.requests.Request;
 import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
@@ -38,7 +39,7 @@ public class RemoteTCPCall extends BaseHandler {
     }
 
     @Override
-    public int run(Request request, Response response) {
+    public int run(Request request, Response response, ChainLink nextLink) {
         boolean retError = false;
 
         Mapping mapping = (Mapping) request.getAuxiliar().get(Constants.AUX_MAPPING);
@@ -106,7 +107,7 @@ public class RemoteTCPCall extends BaseHandler {
         if(retError)
             return -1;
 
-        return super.run(request, response);
+        return super.run(request, response, nextLink);
     }
 
     private void clearSocket(InputStream in) throws IOException {

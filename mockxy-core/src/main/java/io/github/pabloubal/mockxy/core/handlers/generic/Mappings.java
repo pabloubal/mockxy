@@ -1,5 +1,6 @@
 package io.github.pabloubal.mockxy.core.handlers.generic;
 
+import io.github.pabloubal.mockxy.core.ChainLink;
 import io.github.pabloubal.mockxy.core.requests.Request;
 import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
@@ -17,7 +18,7 @@ public class Mappings extends BaseHandler {
 
 
     @Override
-    public int run(Request request, Response response) {
+    public int run(Request request, Response response, ChainLink nextLink) {
         String key;
 
         String protocol = request.getHeader().get(Constants.MAPPINGS_PROTOCOL);
@@ -43,7 +44,7 @@ public class Mappings extends BaseHandler {
         request.getAuxiliar().put(Constants.AUX_MAPPING_KEY, key);
         request.getAuxiliar().put(Constants.AUX_MAPPING, mapping);
 
-        return super.run(request, response);
+        return super.run(request, response, nextLink);
     }
 
     public Map<String, Mapping> getMappings() {

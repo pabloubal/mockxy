@@ -1,5 +1,6 @@
 package io.github.pabloubal.mockxy.core.handlers.http;
 
+import io.github.pabloubal.mockxy.core.ChainLink;
 import io.github.pabloubal.mockxy.core.requests.Request;
 import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
@@ -28,7 +29,7 @@ public class RemoteHTTPCall extends BaseHandler {
     }
 
     @Override
-    public int run(Request request, Response response) {
+    public int run(Request request, Response response, ChainLink nextLink) {
         Mapping mapping = (Mapping) request.getAuxiliar().get(Constants.AUX_MAPPING);
         String method;
 
@@ -53,7 +54,7 @@ public class RemoteHTTPCall extends BaseHandler {
                         conn.setRequestProperty(e.getKey(), e.getValue());
                     });
 
-            if(method != "GET"){
+            if(!"GET".equals(method)){
                 conn.setDoOutput(true);
 
                 OutputStream os = conn.getOutputStream();
@@ -88,9 +89,9 @@ public class RemoteHTTPCall extends BaseHandler {
 
             conn.disconnect();
 
-            response.setStatusCode(String.valueOf(statusCode));
+            response.setStatusCode(conn.getHeaderFields().get(null).get(0));
             conn.getHeaderFields().entrySet().forEach(e-> {
-                if(Objects.isNull(e.getKey())) {
+                if(e.getKey()==null) {
                     return;
                 }
                 response.getHeader().put(e.getKey(), e.getValue().get(0));
@@ -107,6 +108,6 @@ public class RemoteHTTPCall extends BaseHandler {
             e.printStackTrace();
         }
 
-        return super.run(request, response);
+        return super.run(request, response, nextLink);
     }
 }

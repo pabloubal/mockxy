@@ -14,26 +14,35 @@ public class ChainHandler {
     @Autowired
     HandlerEnd handlerEnd;
 
-    private Map<HandlerType, IHandler> firstHandlers;
-    private Map<HandlerType, IHandler> lastHandlers;
+    private ChainLink endLink;
+
+    private Map<HandlerType, ChainLink> firstLink;
+    private Map<HandlerType, ChainLink> lastLink;
 
     public ChainHandler(){
-        firstHandlers = new ConcurrentHashMap<>();
-        lastHandlers = new ConcurrentHashMap<>();
+        firstLink = new ConcurrentHashMap<>();
+        lastLink = new ConcurrentHashMap<>();
         handlerEnd = new HandlerEnd();
+
+        endLink = new ChainLink();
+        endLink.setHandler(handlerEnd);
+        endLink.setNextLink(null);
     }
 
     public int use(HandlerType ht, IHandler handler){
-        handler.setNextHandler(handlerEnd);
 
-        if(firstHandlers.get(ht) == null){
-            firstHandlers.put(ht, handler);
-            lastHandlers.put(ht, handler);
+        ChainLink cl = new ChainLink();
+        cl.setHandler(handler);
+        cl.setNextLink(endLink);
+
+        if(firstLink.get(ht) == null){
+            firstLink.put(ht, cl);
+            lastLink.put(ht, cl);
             return 0;
         }
 
-        lastHandlers.get(ht).setNextHandler(handler);
-        lastHandlers.put(ht, handler);
+        lastLink.get(ht).setNextLink(cl);
+        lastLink.put(ht, cl);
 
         return 0;
     }
@@ -41,8 +50,12 @@ public class ChainHandler {
     public Response run(HandlerType ht, Request request){
         Response resp = new Response();
 
-        firstHandlers.get(ht).run(request, resp);
+        ChainLink link = firstLink.get(ht);
+
+        link.getHandler().run(request, resp, link.getNextLink());
 
         return resp;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package io.github.pabloubal.mockxy.core.handlers.generic;
 
+import io.github.pabloubal.mockxy.core.ChainLink;
 import io.github.pabloubal.mockxy.core.requests.Request;
 import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
@@ -14,7 +15,7 @@ public class GetCache extends BaseHandler {
     private CacheManager cacheManager;
 
     @Override
-    public int run(Request request, Response response) {
+    public int run(Request request, Response response, ChainLink nextLink) {
         Response cachedResp = this.cacheManager.get(request);
 
         //If present, return cached response
@@ -35,7 +36,7 @@ public class GetCache extends BaseHandler {
         }
 
         //If not present, move to next handler
-        return super.run(request, response);
+        return super.run(request, response, nextLink);
     }
 }
 

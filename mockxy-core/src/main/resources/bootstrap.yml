@@ -1,7 +1,7 @@
 spring:
   cloud:
     consul:
-      host: consul.testaws.service
+      host: consul.test.service
       port: 8500
       discovery:
         enabled: true

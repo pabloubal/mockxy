@@ -89,7 +89,8 @@ public class RequestHandler implements Runnable {
             Response resp = this.chainHandler.run(HandlerType.HTTP, req);
 
             String response = "";
-            response += resp.getStatusCode() + "\n";
+            response += resp.getStatusCode() + "\n"; //HTTP version and StatusCode HEADER
+
             for(Map.Entry<String, String> h : resp.getHeader().entrySet()){
                 response += String.join(": ", h.getKey(), h.getValue()) + "\n";
             }
