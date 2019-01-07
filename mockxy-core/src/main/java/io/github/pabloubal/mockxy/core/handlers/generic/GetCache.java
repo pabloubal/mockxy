@@ -16,23 +16,28 @@ public class GetCache extends BaseHandler {
 
     @Override
     public int run(Request request, Response response, ChainLink nextLink) {
-        Response cachedResp = this.cacheManager.get(request);
 
-        //If present, return cached response
-        if(!Objects.isNull(cachedResp)){
-            cachedResp.getHeader().put(Constants.CACHED_RESPONSE_HEADER_KEY, Constants.CACHED_RESPONSE_HEADER_VALUE);
+        //If NO mapping found, then just act as a simple proxy
+        if(! Objects.isNull(request.getAuxiliar().get(Constants.AUX_MAPPING)) ) {
 
-            if(request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_TCP)){
-                response.setBody(cachedResp.getStatusCode());
+            Response cachedResp = this.cacheManager.get(request);
+
+            //If present, return cached response
+            if (!Objects.isNull(cachedResp)) {
+                cachedResp.getHeader().put(Constants.CACHED_RESPONSE_HEADER_KEY, Constants.CACHED_RESPONSE_HEADER_VALUE);
+
+                if (request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_TCP)) {
+                    response.setBody(cachedResp.getStatusCode());
+                } else {
+
+                    response.setBody(cachedResp.getBody());
+                    response.setHeader(cachedResp.getHeader());
+                    response.setStatusCode(cachedResp.getStatusCode());
+                }
+
+                return 0;
             }
-            else {
 
-                response.setBody(cachedResp.getBody());
-                response.setHeader(cachedResp.getHeader());
-                response.setStatusCode(cachedResp.getStatusCode());
-            }
-
-            return 0;
         }
 
         //If not present, move to next handler

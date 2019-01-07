@@ -1,7 +1,1 @@
-spring:
-  cloud:
-    consul:
-      host: consul.test.service
-      port: 8500
-      discovery:
-        enabled: true
+

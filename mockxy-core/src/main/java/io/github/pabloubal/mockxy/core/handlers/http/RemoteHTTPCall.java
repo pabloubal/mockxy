@@ -6,7 +6,6 @@ import io.github.pabloubal.mockxy.core.requests.Response;
 import io.github.pabloubal.mockxy.core.handlers.BaseHandler;
 import io.github.pabloubal.mockxy.core.utils.Constants;
 import io.github.pabloubal.mockxy.core.utils.Mapping;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,15 +17,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class RemoteHTTPCall extends BaseHandler {
-
-    private DiscoveryClient discoveryClient;
-
-    public RemoteHTTPCall(DiscoveryClient discoveryClient){
-        this.discoveryClient = discoveryClient;
-    }
 
     @Override
     public int run(Request request, Response response, ChainLink nextLink) {

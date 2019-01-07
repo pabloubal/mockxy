@@ -30,15 +30,6 @@ public class Mappings extends BaseHandler {
             key = request.getBody().split(tcpSeparator)[0];
         }
 
-        if(!mappings.containsKey(key)){
-            response.setBody("No mapping found for " + key);
-
-            response.getHeader().put("HTTP/1.1", "404");
-            response.getHeader().put("Content-Type","text/plain");
-            response.getHeader().put("Content-Length", String.valueOf(response.getBody().length()));
-            return -1;
-        }
-
         Mapping mapping = mappings.get(key);
 
         request.getAuxiliar().put(Constants.AUX_MAPPING_KEY, key);

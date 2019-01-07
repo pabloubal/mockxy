@@ -17,21 +17,25 @@ public class RemoveCache extends BaseHandler {
     @Override
     public int run(Request request, Response response, ChainLink nextLink) {
 
-        if(request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_HTTP) ||
-                request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_HTTPS)){
+        //If NO mapping found, then just act as a simple proxy
+        if(! Objects.isNull(request.getAuxiliar().get(Constants.AUX_MAPPING)) ) {
 
-            String deleteCache = request.getHeader().get(Constants.HTTP_HEADER_DELETE_CACHE);
+            if (request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_HTTP) ||
+                    request.getHeader().get(Constants.MAPPINGS_PROTOCOL).equals(Constants.MAPPINGS_PROTO_HTTPS)) {
 
-            if(!Objects.isNull(deleteCache) && deleteCache.toLowerCase().equals("true")){
-                this.cacheManager.delete(request, response);
-            }
+                String deleteCache = request.getHeader().get(Constants.HTTP_HEADER_DELETE_CACHE);
 
-        }
-        else{
-            if(request.getBody().contains(Constants.TCP_DELETE_CACHE)){
-                request.setBody( request.getBody().replaceAll(Constants.TCP_DELETE_CACHE, "") );
+                if (!Objects.isNull(deleteCache) && deleteCache.toLowerCase().equals("true")) {
+                    this.cacheManager.delete(request, response);
+                }
 
-                this.cacheManager.delete(request, response);
+            } else {
+                if (request.getBody().contains(Constants.TCP_DELETE_CACHE)) {
+                    request.setBody(request.getBody().replaceAll(Constants.TCP_DELETE_CACHE, ""));
+
+                    this.cacheManager.delete(request, response);
+                }
+
             }
 
         }
