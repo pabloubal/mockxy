@@ -52,16 +52,16 @@ public class MockxyAutoConfiguration {
         return new GetCache();
     }
     @Bean
-    public RemoteHTTPCall remoteHTTPCall(DiscoveryClient discoveryClient){
-        return new RemoteHTTPCall(discoveryClient);
+    public RemoteHTTPCall remoteHTTPCall(){
+        return new RemoteHTTPCall();
     }
     @Bean
     public SetCache setCache(){
         return new SetCache();
     }
     @Bean
-    public RemoteTCPCall remoteTCPCall(DiscoveryClient discoveryClient){
-        return new RemoteTCPCall(discoveryClient);
+    public RemoteTCPCall remoteTCPCall(){
+        return new RemoteTCPCall();
     }
 
     @Bean

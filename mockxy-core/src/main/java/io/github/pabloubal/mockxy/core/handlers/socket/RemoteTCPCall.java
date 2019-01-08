@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.Proxy;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
@@ -33,7 +34,7 @@ public class RemoteTCPCall extends BaseHandler {
 
         Mapping mapping = (Mapping) request.getAuxiliar().get(Constants.AUX_MAPPING);
 
-        Socket sock = new Socket();
+        Socket sock = new Socket(Proxy.NO_PROXY);
         String body = "";
         String readline;
 
@@ -44,10 +45,6 @@ public class RemoteTCPCall extends BaseHandler {
             if( socksHandler != null ){
                 sock.connect(new InetSocketAddress(socksHandler.getIpAddress(), socksHandler.getPort()), 3000);
                 sock.setSoTimeout(3000);
-            }
-            else {
-                sock.connect(new InetSocketAddress(mapping.getHost(), mapping.getPort()), mapping.getTimeout());
-                sock.setSoTimeout(mapping.getTimeout());
             }
 
             InputStream in = sock.getInputStream();

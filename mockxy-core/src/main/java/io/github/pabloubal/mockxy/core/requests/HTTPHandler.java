@@ -43,6 +43,8 @@ public class HTTPHandler implements Runnable {
         String tmpHdr;
 
         try {
+            System.out.println(String.format("New HTTP connection"));
+
             firstLine = proxyToClientBr.readLine();
             while ((tmpHdr = proxyToClientBr.readLine()).length() != 0) {
                 header.add(tmpHdr);
@@ -62,6 +64,8 @@ public class HTTPHandler implements Runnable {
             req.getHeader().put(Constants.MAPPINGS_PROTOCOL, Constants.MAPPINGS_PROTO_HTTP);
             req.getHeader().put(Constants.HTTP_HEADER_METHOD, firstLine);
             req.setBody(body);
+
+
 
             Response resp = this.chainHandler.run(HandlerType.HTTP, req);
 

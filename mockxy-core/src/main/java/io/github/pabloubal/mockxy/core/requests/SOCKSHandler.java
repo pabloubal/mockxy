@@ -58,6 +58,7 @@ public class SOCKSHandler implements Runnable {
                 return;
             }
 
+            System.out.println(String.format("New SOCKS connection to %s:%d",this.getIpAddress(), this.getPort()));
             while (proxyToClientBr.ready()) {
                 message += (char) proxyToClientBr.read();
             }

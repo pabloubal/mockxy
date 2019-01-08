@@ -1,12 +1,8 @@
 proxy:
   mappings:
     GET AIF:
-      host: ace-hotel
-      port: 8003
       dir: ace
       timeout: 500
-      linesToRead: 0
-      discovery: true
     tab-auth-api:
       host: http://tab-auth-api.int.hotelbeds.com
       dir: tab-auth-api

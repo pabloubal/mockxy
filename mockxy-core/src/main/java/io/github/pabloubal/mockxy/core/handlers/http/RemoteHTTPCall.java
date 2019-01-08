@@ -13,8 +13,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -30,13 +33,13 @@ public class RemoteHTTPCall extends BaseHandler {
         String query = String.join(" ", Arrays.copyOfRange(tmpMethod, 1, tmpMethod.length-1));
 
         if(!query.contains("http://")){
-            query = "http://" + mapping.getHost() + "/" + query;
+            query = "http://" + query;
         }
 
         try {
             URL url = new URL(query);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
             conn.setRequestMethod(method);
             request.getHeader().entrySet().stream()
                     .forEach(e->{
