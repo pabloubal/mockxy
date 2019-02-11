@@ -11,7 +11,7 @@
 
 	<groupId>io.github.pabloubal</groupId>
 	<artifactId>mockxy-spring-boot-starter</artifactId>
-	<version>0.0.9-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>mockxy-spring-boot-starter</name>
 
 	<licenses>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>io.github.pabloubal</groupId>
             <artifactId>mockxy-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

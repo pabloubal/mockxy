@@ -2,6 +2,7 @@ package io.github.pabloubal.mockxy.core.utils;
 
 public class Mapping {
     private String dir;
+    private MappingType type;
     private Boolean matchHeaders = true;
     private Integer timeout = 3000;
 
@@ -29,6 +30,19 @@ public class Mapping {
 
     public void setTimeout(Integer timeout) {
         this.timeout = timeout;
+    }
+
+    public MappingType getType() {
+        return type;
+    }
+
+    public void setType(MappingType type) {
+        this.type = type;
+    }
+
+    public enum MappingType{
+        TCP,
+        HTTP
     }
 
 }

@@ -11,12 +11,14 @@ import io.github.pabloubal.mockxy.core.handlers.generic.SetCache;
 import io.github.pabloubal.mockxy.core.handlers.http.RemoteHTTPCall;
 import io.github.pabloubal.mockxy.core.handlers.socket.RemoteTCPCall;
 import io.github.pabloubal.mockxy.core.requests.Proxy;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MockxyConfiguration {
+
     @Bean
     public HandlerEnd handlerEnd(){
         return new HandlerEnd();
@@ -80,7 +82,7 @@ public class MockxyConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "proxy.cache.strategy", havingValue = "FileCache")
+    @ConditionalOnExpression("'${mockxy.cache.strategy:FileCache}' == 'FileCache'")
     public FileCache cacheStrategyFile(){
         return new FileCache();
     }
