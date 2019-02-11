@@ -59,8 +59,10 @@ public class SOCKSHandler implements Runnable {
             }
 
             System.out.println(String.format("New SOCKS connection to %s:%d",this.getIpAddress(), this.getPort()));
-            while (proxyToClientBr.ready()) {
-                message += (char) proxyToClientBr.read();
+
+            //Wait till ready
+            for(int i=0; i<10 && !proxyToClientBr.ready(); i++){
+                Thread.sleep(1);
             }
 
             Request req = new Request();
@@ -87,6 +89,8 @@ public class SOCKSHandler implements Runnable {
 
         }
         catch(IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

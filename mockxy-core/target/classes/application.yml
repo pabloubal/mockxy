@@ -1,21 +1,3 @@
-proxy:
-  mappings:
-    GET AIF:
-      dir: ace
-      timeout: 500
-    tab-auth-api:
-      host: http://tab-auth-api.int.hotelbeds.com
-      dir: tab-auth-api
-
-  cache:
-    strategy: FileCache
-    baseDir: /home/pablo/tmp
-
-  tcpSeparator: "-"
-
-  httpPort: 8000
-  socksPort: 1080
-
 spring:
   main:
     web-environment: false

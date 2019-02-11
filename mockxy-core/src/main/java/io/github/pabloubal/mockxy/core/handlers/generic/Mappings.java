@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConfigurationProperties("proxy")
+@ConfigurationProperties("mockxy")
 public class Mappings extends BaseHandler {
     private Map<String, Mapping> mappings = new HashMap<>();
     private String tcpSeparator;
@@ -19,23 +19,31 @@ public class Mappings extends BaseHandler {
 
     @Override
     public int run(Request request, Response response, ChainLink nextLink) {
-        String key;
 
+        String matchingKey = mappings.keySet().stream().
+                filter(k -> getStringToMatch(request).contains(k)).
+                findFirst().
+                orElse(null);
+
+        if(matchingKey != null) {
+            Mapping mapping = mappings.get(matchingKey);
+
+            request.getAuxiliar().put(Constants.AUX_MAPPING_KEY, matchingKey);
+            request.getAuxiliar().put(Constants.AUX_MAPPING, mapping);
+        }
+
+        return super.run(request, response, nextLink);
+    }
+
+    private String getStringToMatch(Request request){
         String protocol = request.getHeader().get(Constants.MAPPINGS_PROTOCOL);
 
         if(protocol.equals(Constants.MAPPINGS_PROTO_HTTP) || protocol.equals(Constants.MAPPINGS_PROTO_HTTPS)){
-            key = request.getHeader().get(Constants.HTTP_HEADER_HOST).split("\\.")[0];
+            return request.getHeader().get(Constants.HTTP_HEADER_HOST);
         }
         else{
-            key = request.getBody().split(tcpSeparator)[0];
+            return request.getBody();
         }
-
-        Mapping mapping = mappings.get(key);
-
-        request.getAuxiliar().put(Constants.AUX_MAPPING_KEY, key);
-        request.getAuxiliar().put(Constants.AUX_MAPPING, mapping);
-
-        return super.run(request, response, nextLink);
     }
 
     public Map<String, Mapping> getMappings() {

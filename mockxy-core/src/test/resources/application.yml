@@ -1,0 +1,16 @@
+mockxy:
+  mappings:
+    TCP HEADER:
+      dir: tcpHeader
+      type: TCP
+      timeout: 500
+    httpbin:
+      dir: httpbin
+      type: HTTP
+
+  cache:
+    strategy: FileCache
+    baseDir: /tmp
+
+  httpPort: 8000
+  socksPort: 1080

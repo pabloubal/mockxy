@@ -12,15 +12,15 @@ import io.github.pabloubal.mockxy.core.handlers.generic.SetCache;
 import io.github.pabloubal.mockxy.core.handlers.http.RemoteHTTPCall;
 import io.github.pabloubal.mockxy.core.handlers.socket.RemoteTCPCall;
 import io.github.pabloubal.mockxy.core.requests.Proxy;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import io.github.pabloubal.mockxy.core.utils.Mapping;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import java.util.stream.Collectors;
 
 /**
  * Spring Boot Autoconfiguration.
@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @EnableConfigurationProperties
 @Configuration
+@ConditionalOnProperty(value = "mockxy.enabled", havingValue = "true")
 public class MockxyAutoConfiguration {
 
     @Bean
@@ -96,7 +97,7 @@ public class MockxyAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "proxy.cache.strategy", havingValue = "FileCache")
+    @ConditionalOnExpression("'${mockxy.cache.strategy:FileCache}' == 'FileCache'")
     public FileCache cacheStrategyFile(){
         return new FileCache();
     }
@@ -104,6 +105,35 @@ public class MockxyAutoConfiguration {
     @Bean
     public CacheManager cacheManager(){
         return new CacheManager();
+    }
+
+    @Bean//TODO check if there's a better way to hook to a PostConfiguration
+    public Object init(@Value("${mockxy.socksNonProxyHosts:}") String socksNonProxyHosts,
+                      @Value("${mockxy.httpNonProxyHosts:}") String httpNonProxyHosts,
+                      @Value("${mockxy.httpPort:}") String httpProxyPort,
+                      @Value("${mockxy.socksPort:}") String socksProxyPort,
+                      Mappings mappings) {
+
+        if (!StringUtils.isEmpty(httpProxyPort)) {
+            System.setProperty("http.proxyHost", "localhost");
+            System.setProperty("http.proxyPort", httpProxyPort);
+            System.setProperty("http.nonProxyHosts", httpNonProxyHosts);
+        }
+
+        if (!StringUtils.isEmpty(socksProxyPort)) {
+            System.setProperty("socksProxyHost", "localhost");
+            System.setProperty("socksProxyPort", socksProxyPort);
+
+            if(StringUtils.isEmpty(socksNonProxyHosts)) {
+                socksNonProxyHosts = mappings.getMappings().entrySet().stream()
+                                        .filter(e -> e.getValue().getType().equals(Mapping.MappingType.HTTP))
+                                        .map(e->e.getKey()+"*")
+                                        .collect(Collectors.joining("|"));
+            }
+            System.setProperty("socksNonProxyHosts", socksNonProxyHosts);
+        }
+
+        return null;
     }
 
 }

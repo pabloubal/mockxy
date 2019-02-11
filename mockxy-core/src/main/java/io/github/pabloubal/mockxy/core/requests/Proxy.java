@@ -15,10 +15,10 @@ public class Proxy{
     @Autowired
     ChainHandler chainHandler;
 
-    @Value("${proxy.httpPort}")
+    @Value("${mockxy.httpPort:8000}")
     private Integer httpPort;
 
-    @Value("${proxy.socksPort}")
+    @Value("${mockxy.socksPort:3001}")
     private Integer socksPort;
 
     private Thread httpThread;

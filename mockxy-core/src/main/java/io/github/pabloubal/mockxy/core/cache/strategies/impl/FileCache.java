@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class FileCache implements CacheStrategy {
-    @Value("${proxy.cache.baseDir}")
+    @Value("${mockxy.cache.baseDir}")
     private String baseDir;
 
     @PostConstruct
